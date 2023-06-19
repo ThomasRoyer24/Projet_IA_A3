@@ -1,7 +1,8 @@
 import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder
+import csv
 
-data = pd.read_csv("/content/drive/MyDrive/TP_IA/projet_IA/prepared_data.csv", index_col=0, header=0)
+data = pd.read_csv("prepared_data.csv", index_col=0, header=0)
 
 
 
@@ -59,3 +60,4 @@ dict_secu = {14:"Utilisation d'une ceinture de sécurité",
              9:"Présence dispositif enfant - Utilisation non déterminable",
              5:"Présence d'un dispositif enfant non utilisé"}
 
+data_red.to_csv("final_data.csv", index=False)
