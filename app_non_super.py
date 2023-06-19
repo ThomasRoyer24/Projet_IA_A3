@@ -1,0 +1,4 @@
+
+
+#Reduction de dimension
+
