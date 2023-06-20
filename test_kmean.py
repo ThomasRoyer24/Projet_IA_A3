@@ -23,6 +23,23 @@ cluster_labels = kmeans.labels_
 # Add cluster labels to the DataFrame
 data['cluster'] = cluster_labels
 
+plt.rcParams["figure.figsize"] = [7.50, 7.50]
+plt.rcParams["figure.autolayout"] = True
+
+tab_color = ['#FF0000',
+             '#FF8800',
+             '#FFFF00',
+             '#FFFF88',
+             '#888888',
+             '#00FF00',
+             '#00FF88',
+             '#88FF00',
+             '#00FFFF',
+             '#0000FF',
+             '#0088FF',
+             '#8800FF',
+             '#8888FF']
+
 for j in range(13):
   for i in range(len(data)):
     if (data['cluster'][i] == j):
