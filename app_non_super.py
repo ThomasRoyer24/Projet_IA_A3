@@ -60,4 +60,17 @@ dict_secu = {14:"Utilisation d'une ceinture de sécurité",
              9:"Présence dispositif enfant - Utilisation non déterminable",
              5:"Présence d'un dispositif enfant non utilisé"}
 
+print(data_red.info())
+
+# for i in range (len(data_red)):
+#     if (data_red["latitude"][i]>200):
+#         data_red["latitude"][i] = 48.85838416016537
+#         data_red["longitude"][i] = 2.2953289070741376
+#
+
+for index, row in data_red.iterrows():
+    if row['longitude'] > 200:
+        data_red.at[index, 'longitude'] = 2.2953
+        data_red.at[index, 'latitude'] = 48.8583
+
 data_red.to_csv("final_data.csv", index=False)
