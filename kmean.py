@@ -41,39 +41,39 @@ def kmean(distance, k, n):
   if n == 0:
     final = [tab_cluster, centro_lat, centro_long]
     # print(tab_cluster)
-    print(centro_lat)
-    print(centro_long)
-    tab_cluster_array = np.array(tab_cluster[:1000])
-    silhouette = silhouette_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
-    print("Silhouette score:", silhouette)
-
-    calinski = metrics.calinski_harabasz_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
-    print("Calinski-Harabasz score:", calinski)
-
-    davies = davies_bouldin_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
-    print("Davies-Bouldin score:", davies)
-
-    ch_scores = []
-
-    # Define the range of values for k
-    k_values = range(2, k + 1)
-
-    # Iterate over each value of k
-    for k in k_values:
-      # Perform K-means clustering and obtain the cluster labels
-
-      # Calculate the Calinski-Harabasz score
-      ch_score = metrics.calinski_harabasz_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
-
-      # Append the score to the list
-      ch_scores.append(ch_score)
-
-    # Plot the Calinski-Harabasz scores
-    plt.plot(k_values, ch_scores, marker='o')
-    plt.xlabel('Number of clusters (k)')
-    plt.ylabel('Calinski-Harabasz Score')
-    plt.title('Calinski-Harabasz Score for Different Values of k')
-    plt.show()
+    # print(centro_lat)
+    # print(centro_long)
+    # tab_cluster_array = np.array(tab_cluster[:1000])
+    # silhouette = silhouette_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
+    # print("Silhouette score:", silhouette)
+    #
+    # calinski = metrics.calinski_harabasz_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
+    # print("Calinski-Harabasz score:", calinski)
+    #
+    # davies = davies_bouldin_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
+    # print("Davies-Bouldin score:", davies)
+    #
+    # ch_scores = []
+    #
+    # # Define the range of values for k
+    # k_values = range(2, k + 1)
+    #
+    # # Iterate over each value of k
+    # for k in k_values:
+    #   # Perform K-means clustering and obtain the cluster labels
+    #
+    #   # Calculate the Calinski-Harabasz score
+    #   ch_score = metrics.calinski_harabasz_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
+    #
+    #   # Append the score to the list
+    #   ch_scores.append(ch_score)
+    #
+    # # Plot the Calinski-Harabasz scores
+    # plt.plot(k_values, ch_scores, marker='o')
+    # plt.xlabel('Number of clusters (k)')
+    # plt.ylabel('Calinski-Harabasz Score')
+    # plt.title('Calinski-Harabasz Score for Different Values of k')
+    # plt.show()
 
     # silhouette_values = silhouette_samples(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
     #
@@ -121,7 +121,7 @@ def kmean(distance, k, n):
     # plt.show()
     return final
   print("itération : ", n)
-  kmean(distance,k,n-1)
+  return kmean(distance,k,n-1)
 
   # print(tab_cluster)
 
@@ -152,30 +152,31 @@ def dist_haversine(long1, lat1, long2, lat2):
   return 2*math.asin((math.sqrt((math.sin((math.radians(lat1)-math.radians(long1))/2)*math.sin((math.radians(lat1)-math.radians(long1))/2)+math.cos(math.radians(lat1))*math.cos(math.radians(long1))*math.sin((math.radians(lat2)-math.radians(long2))/2))*math.sin((math.radians(lat2)-math.radians(long2))/2))))
 
 
-tab_km = kmean("L1",13,5)
+tab_km = kmean("L1",13,3)
+print(tab_km)
 
-plt.rcParams["figure.figsize"] = [7.50, 7.50]
-plt.rcParams["figure.autolayout"] = True
-
-tab_color = ['#FF0000',
-             '#FF8800',
-             '#FFFF00',
-             '#FFFF88',
-             '#888888',
-             '#00FF00',
-             '#00FF88',
-             '#88FF00',
-             '#00FFFF',
-             '#0000FF',
-             '#0088FF',
-             '#8800FF',
-             '#8888FF']
-
-for j in range(13):
-  for i in range(len(data)):
-    if (tab_km[0][i] == j):
-      plt.plot( data['longitude'][i], data['latitude'][i], color=tab_color[j], marker='.', linestyle='')
-  plt.plot(tab_km[2][j], tab_km[1][j], color="000000", marker='o', linestyle='')
-  print("itr :", j)
-
-plt.show()
+# plt.rcParams["figure.figsize"] = [7.50, 7.50]
+# plt.rcParams["figure.autolayout"] = True
+#
+# tab_color = ['#FF0000',
+#              '#FF8800',
+#              '#FFFF00',
+#              '#FFFF88',
+#              '#888888',
+#              '#00FF00',
+#              '#00FF88',
+#              '#88FF00',
+#              '#00FFFF',
+#              '#0000FF',
+#              '#0088FF',
+#              '#8800FF',
+#              '#8888FF']
+#
+# for j in range(13):
+#   for i in range(len(data)):
+#     if (tab_km[0][i] == j):
+#       plt.plot( data['longitude'][i], data['latitude'][i], color=tab_color[j], marker='.', linestyle='')
+#   plt.plot(tab_km[2][j], tab_km[1][j], color="000000", marker='o', linestyle='')
+#   print("itr :", j)
+#
+# plt.show()
