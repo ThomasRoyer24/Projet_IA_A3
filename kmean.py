@@ -152,4 +152,30 @@ def dist_haversine(long1, lat1, long2, lat2):
   return 2*math.asin((math.sqrt((math.sin((math.radians(lat1)-math.radians(long1))/2)*math.sin((math.radians(lat1)-math.radians(long1))/2)+math.cos(math.radians(lat1))*math.cos(math.radians(long1))*math.sin((math.radians(lat2)-math.radians(long2))/2))*math.sin((math.radians(lat2)-math.radians(long2))/2))))
 
 
-kmean("L1",13,5)
+tab_km = kmean("L1",13,5)
+
+plt.rcParams["figure.figsize"] = [7.50, 7.50]
+plt.rcParams["figure.autolayout"] = True
+
+tab_color = ['#FF0000',
+             '#FF8800',
+             '#FFFF00',
+             '#FFFF88',
+             '#888888',
+             '#00FF00',
+             '#00FF88',
+             '#88FF00',
+             '#00FFFF',
+             '#0000FF',
+             '#0088FF',
+             '#8800FF',
+             '#8888FF']
+
+for j in range(13):
+  for i in range(len(data)):
+    if (tab_km[0][i] == j):
+      plt.plot( data['longitude'][i], data['latitude'][i], color=tab_color[j], marker='.', linestyle='')
+  plt.plot(tab_km[2][j], tab_km[1][j], color="000000", marker='o', linestyle='')
+  print("itr :", j)
+
+plt.show()
