@@ -1,5 +1,9 @@
 import pandas as pd
 import math
+import numpy as np
+from sklearn.metrics import silhouette_score
+import matplotlib.pyplot as plt
+from sklearn.metrics import silhouette_samples
 
 data = pd.read_csv("final_data.csv")
 
@@ -18,6 +22,14 @@ def kmean(distance, k, n):
         if (dist_l1(centro_long[j],centro_lat[j],data["longitude"][i],data["latitude"][i]) <= temp):
           temp = dist_l1(centro_long[j],centro_lat[j],data["longitude"][i],data["latitude"][i])
           tab_cluster[i] = j
+      if (distance == "L2"):
+        if (dist_l2(centro_long[j],centro_lat[j],data["longitude"][i],data["latitude"][i]) <= temp):
+          temp = dist_l2(centro_long[j],centro_lat[j],data["longitude"][i],data["latitude"][i])
+          tab_cluster[i] = j
+      if (distance == "haversine"):
+        if (dist_haversine(centro_long[j],centro_lat[j],data["longitude"][i],data["latitude"][i]) <= temp):
+          temp = dist_haversine(centro_long[j],centro_lat[j],data["longitude"][i],data["latitude"][i])
+          tab_cluster[i] = j
     temp = 999999
   for i in range(k):
     if i in tab_cluster:
@@ -26,9 +38,59 @@ def kmean(distance, k, n):
       centro_long[i] = res_centroide[1]
   if n == 0:
     final = [tab_cluster, centro_lat, centro_long]
-    print(tab_cluster)
+    # print(tab_cluster)
     print(centro_lat)
     print(centro_long)
+    tab_cluster_array = np.array(tab_cluster[:1000])
+    silhouette = silhouette_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
+    print("Silhouette score:", silhouette)
+
+
+
+    silhouette_values = silhouette_samples(data[['longitude', 'latitude']].head(1000), tab_cluster_array)
+
+    # Get the number of unique clusters
+    unique_labels = np.unique(tab_cluster_array)
+    num_clusters = len(unique_labels)
+
+    # Create a subplot with 1 row and 1 column
+    fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+
+    # Set y-axis limits and initialize the y_ticks variable
+    y_lower, y_upper = 0, 0
+    y_ticks = []
+
+    # Loop over each cluster
+    for i, label in enumerate(unique_labels):
+      # Get the silhouette scores for data points in the current cluster
+      cluster_silhouette_values = silhouette_values[tab_cluster_array == label]
+
+      # Sort the silhouette scores in ascending order
+      cluster_silhouette_values.sort()
+
+      # Calculate the size of the current cluster
+      cluster_size = cluster_silhouette_values.shape[0]
+
+      # Update y-axis limits and y_ticks
+      y_upper += cluster_size
+      y_ticks.append((y_lower + y_upper) / 2)
+
+      # Color the silhouette plot for the current cluster
+      color = plt.cm.get_cmap("Spectral")(i / num_clusters)
+      ax.fill_betweenx(np.arange(y_lower, y_upper), 0, cluster_silhouette_values, facecolor=color, alpha=0.7)
+
+      # Update y_lower for the next cluster
+      y_lower += cluster_size
+
+    # Set the properties of the silhouette plot
+    ax.axvline(x=silhouette_score(data[['longitude', 'latitude']].head(1000), tab_cluster_array), color="red", linestyle="--")
+    ax.set_xlabel("Silhouette Coefficient")
+    ax.set_ylabel("Cluster")
+    ax.set_yticks(y_ticks)
+    ax.set_title("Silhouette Plot")
+    ax.grid(True)
+
+    plt.show()
     return final
   print("itération : ", n)
   kmean(distance,k,n-1)
@@ -44,8 +106,6 @@ def mean_cluster(tab, cluster):
       temp_long += data["longitude"][i]
       temp_lat += data["latitude"][i]
       number+=1
-    if cluster == 1:
-      print(tab[i])
   # print(cluster)
   # print(number)
   temp_long = temp_long /number
@@ -64,4 +124,4 @@ def dist_haversine(long1, lat1, long2, lat2):
   return 2*math.asin((math.sqrt((math.sin((math.radians(lat1)-math.radians(long1))/2)*math.sin((math.radians(lat1)-math.radians(long1))/2)+math.cos(math.radians(lat1))*math.cos(math.radians(long1))*math.sin((math.radians(lat2)-math.radians(long2))/2))*math.sin((math.radians(lat2)-math.radians(long2))/2))))
 
 
-kmean("L1",1,100)
+kmean("L1",13,20)
