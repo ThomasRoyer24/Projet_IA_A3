@@ -74,7 +74,7 @@ def show_grid():
 
 
 SVM = load('SVM.joblib')
-
+print(SVM.best_estimator_)
 cm =0
 precision =0
 recall=0
