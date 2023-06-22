@@ -76,41 +76,38 @@ def show_grid():
 
     plt.show()
 
-show_grid()
-def MLP():
-    mlp = MLPClassifier(solver='adam', hidden_layer_sizes=(100, 100), activation='tanh', alpha=0.001)
-
-    accuracy=0
-    cm =0
-    precision =0
-    recall=0
-    for i in range(5):
-
-        y_pred = MLP.predict(locals()["X_test_holdout_" + str(i+1)])
-
-        accuracy_test = accuracy_score(locals()["X_test_holdout_" + str(i+1)], y_pred)
-
-        cm_test = confusion_matrix(locals()["y_test_holdout_" + str(i+1)], y_pred)
-
-        # Précision
-        precision_test = precision_score(locals()["y_test_holdout_" + str(i+1)], y_pred,average='weighted')
-
-        # Rappel
-        recall_test = recall_score(locals()["y_test_holdout_" + str(i+1)], y_pred,average='weighted')
-
-        accuracy += accuracy_test
-        cm += cm_test
-        precision += precision_test
-        recall += recall_test
 
 
-    recall /=5
-    precision /=5
-    accuracy /=5
-    for i in range(len(cm)):
-        for j in range(len(cm[i])):
-            cm[i][j] /= 5
+mlp = load('MLP.joblib')
 
-    print("Rappel :", recall)
-    print("Précision :", precision)
-    print("Matrice de confusion :\n", cm)
+cm =0
+precision =0
+recall=0
+for i in range(5):
+
+
+    y_pred = mlp.predict(locals()["X_test_holdout_" + str(i+1)])
+
+
+    cm_test = confusion_matrix(locals()["y_test_holdout_" + str(i+1)], y_pred)
+
+    # Précision
+    precision_test = precision_score(locals()["y_test_holdout_" + str(i+1)], y_pred,average='weighted')
+
+    # Rappel
+    recall_test = recall_score(locals()["y_test_holdout_" + str(i+1)], y_pred,average='weighted')
+
+    cm += cm_test
+    precision += precision_test
+    recall += recall_test
+
+
+recall /=5
+precision /=5
+for i in range(len(cm)):
+    for j in range(len(cm[i])):
+        cm[i][j] /= 5
+
+print("Rappel :", recall)
+print("Précision :", precision)
+print("Matrice de confusion :\n", cm)
