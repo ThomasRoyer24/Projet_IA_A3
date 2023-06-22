@@ -37,11 +37,6 @@ def kmean(distance, k, n):
           temp = dist_haversine(centro_long[j],centro_lat[j],data["longitude"][i],data["latitude"][i])
           tab_cluster[i] = j
     temp = 999999
-  for i in range(k):
-    if i in tab_cluster:
-      res_centroide = mean_cluster(tab_cluster, i)
-      centro_lat[i] = res_centroide[0]
-      centro_long[i] = res_centroide[1]
   if n == 0:
     final = [tab_cluster, centro_lat, centro_long]
     tab_cluster_array = np.array(tab_cluster[:2000])
@@ -92,6 +87,11 @@ def kmean(distance, k, n):
 
     plt.show()
     return final
+  for i in range(k):
+    if i in tab_cluster:
+      res_centroide = mean_cluster(tab_cluster, i)
+      centro_lat[i] = res_centroide[0]
+      centro_long[i] = res_centroide[1]
   print("itération : ", n)
   return kmean(distance,k,n-1)
 
