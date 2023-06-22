@@ -73,7 +73,6 @@ def show_grid():
     plt.show()
 
 
-
 SVM = load('SVM.joblib')
 
 cm =0

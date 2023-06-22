@@ -64,8 +64,8 @@ def show_grid():
     plt.figure(figsize=(10, 6))
     plt.imshow(mean_scores, interpolation='nearest', cmap='hot')
     plt.title('Optimization of C and gamma with kernel = rbf')
-    plt.xlabel('C')
-    plt.ylabel('gamma')
+    plt.xlabel('param_hidden_layer_sizes')
+    plt.ylabel('param_alpha')
     plt.colorbar(label='Mean Test Score')
     plt.xticks(np.arange(len(param_hidden_layer_sizes)), param_hidden_layer_sizes, rotation=45)
     plt.yticks(np.arange(len(param_alpha)), param_alpha)
@@ -79,7 +79,7 @@ def show_grid():
 
 
 mlp = load('MLP.joblib')
-
+print(mlp.best_estimator_)
 cm =0
 precision =0
 recall=0
