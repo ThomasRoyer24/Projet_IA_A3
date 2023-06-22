@@ -52,7 +52,6 @@ def show_grid():
     max_depths = np.unique(clf_tree.cv_results_['param_max_depth'].data)
     n_estimators = np.unique(clf_tree.cv_results_['param_n_estimators'].data)
     mean_scores = clf_tree.cv_results_['mean_test_score']
-
     # Convertir les scores en une matrice 2D
     mean_scores = mean_scores.reshape(len(max_depths), len(n_estimators))
 
@@ -73,9 +72,8 @@ def show_grid():
     plt.show()
 
 
-
 random_forest = load('random_forest.joblib')
-
+print(random_forest.best_estimator_)
 accuracy_tree=0
 cm =0
 precision =0
