@@ -18,10 +18,13 @@ def kmean(distance, k, n):
   centro_lat = []
   centro_long = []
   tab_cluster = [None] * len(data)
+  #initialisation de notre valeur tempo tres grande pour les comparaisons
   temp = 99999999
+  #Recuperation de nos centroïdes
   for i in range (k):
     centro_lat.append(random.choice(data["latitude"]))
     centro_long.append(random.choice(data["longitude"]))
+  #Association de chaque point a un cluster par rapport aux centroïdes
   for i in range(len(data)):
     for j in range (len(centro_lat)):
       if (distance == "L1"):
@@ -37,6 +40,7 @@ def kmean(distance, k, n):
           temp = dist_haversine(centro_long[j],centro_lat[j],data["longitude"][i],data["latitude"][i])
           tab_cluster[i] = j
     temp = 999999
+  #Test si nous sommes a la dernière itération
   if n == 0:
     final = [tab_cluster, centro_lat, centro_long]
     tab_cluster_array = np.array(tab_cluster[:2000])
@@ -87,13 +91,14 @@ def kmean(distance, k, n):
 
     plt.show()
     return final
+  #Préparation pour la prochgaine itération, calcule des nouveaux centroïdes
   for i in range(k):
     if i in tab_cluster:
       res_centroide = mean_cluster(tab_cluster, i)
       centro_lat[i] = res_centroide[0]
       centro_long[i] = res_centroide[1]
   print("itération : ", n)
-  return kmean(distance,k,n-1)
+  return kmean(distance,k,n-1) #Récursivitées n fois
 
 
 def davies(k):
@@ -154,31 +159,34 @@ def dist_haversine(long1, lat1, long2, lat2):
   return 2*math.asin((math.sqrt((math.sin((math.radians(lat1)-math.radians(long1))/2)*math.sin((math.radians(lat1)-math.radians(long1))/2)+math.cos(math.radians(lat1))*math.cos(math.radians(long1))*math.sin((math.radians(lat2)-math.radians(long2))/2))*math.sin((math.radians(lat2)-math.radians(long2))/2))))
 
 
-# res = kmean("L1",13,5)
-kmean("L1", 13, 5)
+tab_km = kmean("L1",13,100)
+data['cluster'] = tab_km[0]
 
+#PARTIE VISUALISATION :
+
+pip install basemap
+from mpl_toolkits.basemap import Basemap
+import matplotlib.pyplot as plt
 # plt.rcParams["figure.figsize"] = [7.50, 7.50]
 # plt.rcParams["figure.autolayout"] = True
-#
-# tab_color = ['#FF0000',
-#              '#FF8800',
-#              '#FFFF00',
-#              '#FFFF88',
-#              '#888888',
-#              '#00FF00',
-#              '#00FF88',
-#              '#88FF00',
-#              '#00FFFF',
-#              '#0000FF',
-#              '#0088FF',
-#              '#8800FF',
-#              '#8888FF']
-#
-# for j in range(13):
-#   for i in range(len(data)):
-#     if (tab_km[0][i] == j):
-#       plt.plot( data['longitude'][i], data['latitude'][i], color=tab_color[j], marker='.', linestyle='')
-#   plt.plot(tab_km[2][j], tab_km[1][j], color="000000", marker='o', linestyle='')
-#   print("itr :", j)
-#
-# plt.show()
+
+# Create a new figure
+fig = plt.figure(figsize=(10, 15))
+
+# Create a Basemap instance for France
+m = Basemap(llcrnrlon=-5, llcrnrlat=40, urcrnrlon=10, urcrnrlat=52, resolution='i')
+
+# Draw coastlines, countries, and fill the continents
+m.drawcoastlines(linewidth=0.5)
+m.drawcountries(linewidth=0.5)
+m.fillcontinents(color='lightgray')
+
+# Plot the data points on top of the map
+m.scatter(data['longitude'], data['latitude'], c=data['cluster'], latlon=True)
+
+# Plot the cluster centers as markers
+for i in range(len(tab_km[1])):
+  x, y = m(tab_km[2][i], tab_km[1][i])
+  plt.plot(x, y, color="#000000", marker='o', linestyle='')
+
+plt.show()
