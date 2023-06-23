@@ -15,3 +15,5 @@ result = kmeans(sys.argv[1], sys.argv[2], sys.argv[3])
 
 print(result)
 
+# with open('data.json', 'w') as mon_fichier:
+# 	json.dump(kmeans_fct, mon_fichier)
