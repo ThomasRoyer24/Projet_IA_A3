@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split, LeaveOneOut
 from sklearn.utils import resample
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
-
+import matplotlib.pyplot as plt
 
 
 data = pd.read_csv("final_data.csv")
@@ -27,11 +27,12 @@ y_train_selected = pd.Series()
 
 for c in classes:
     class_samples = X[y == c]
+    #10% de la base de donnée
     class_samples = resample(class_samples, n_samples=int(0.1 * len(class_samples)), random_state=42)
     X_train_selected = pd.concat([X_train_selected, class_samples])
     y_train_selected = pd.concat([y_train_selected, pd.Series([c] * len(class_samples))])
 
-loo = LeaveOneOut() #0.5357636012151339
+loo = LeaveOneOut()
 
 accuracy = 0
 g =0
@@ -55,21 +56,25 @@ accuracy /= g
 print(accuracy)
 
 #holdout -- KNN
-accuracy = 0
-g =0
-for i in range(5):
 
-  for t in range(29,30):
-    knn = KNeighborsClassifier(n_neighbors=t)
+tab = []
+for t in range(1,31):
+    accuracy = 0
+    for i in range(5):
+        knn = KNeighborsClassifier(n_neighbors=t)
 
-    knn.fit(locals()["X_train_holdout_" + str(i+1)], locals()["y_train_holdout_" + str(i+1)])
+        knn.fit(locals()["X_train_holdout_" + str(i+1)], locals()["y_train_holdout_" + str(i+1)])
 
-    y_pred = knn.predict(locals()["X_test_holdout_" + str(i+1)])
+        y_pred = knn.predict(locals()["X_test_holdout_" + str(i+1)])
 
-    accuracy += accuracy_score(locals()["y_test_holdout_" + str(i+1)], y_pred)
-    g+=1
+        accuracy += accuracy_score(locals()["y_test_holdout_" + str(i+1)], y_pred)
+    print(t)
+    #moyenne
+    accuracy /= 5
 
-#moyenne
-accuracy /= g
+    tab.append(accuracy)
 
-print(accuracy)
+liste = [i for i in range(1, 31)]
+
+plt.plot(liste,tab)
+plt.show()

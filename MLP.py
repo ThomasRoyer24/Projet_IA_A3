@@ -54,7 +54,7 @@ def show_grid():
     param_hidden_layer_sizes = set(clf_MLP.cv_results_['param_hidden_layer_sizes'].data)
     mean_scores = clf_MLP.cv_results_['mean_test_score']
 
-
+    #fixe des paramètres pour avoir un tableau a 2D et non 4 que on ne peut pas afficher
     mean_scores = mean_scores[(clf_MLP.cv_results_["param_activation"] == "tanh") & (clf_MLP.cv_results_["param_solver"] == "adam")]
 
     # Convertir les scores en une matrice 2D

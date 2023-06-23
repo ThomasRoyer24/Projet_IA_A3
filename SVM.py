@@ -52,6 +52,7 @@ def show_grid():
     param_C = np.unique(clf_SVM.cv_results_['param_C'].data)
     param_gamma = set(clf_SVM.cv_results_['param_gamma'].data)
     mean_scores = clf_SVM.cv_results_['mean_test_score']
+    # fixe des paramètres pour avoir un tableau a 2D et non 3 que on ne peut pas afficher
     mean_scores = mean_scores[clf_SVM.cv_results_["param_kernel"]== "rbf"]
     # Convertir les scores en une matrice 2D
     mean_scores = mean_scores.reshape(len(param_C), len(param_gamma))
@@ -60,8 +61,8 @@ def show_grid():
     plt.figure(figsize=(10, 6))
     plt.imshow(mean_scores, interpolation='nearest', cmap='hot')
     plt.title('Optimization of C and gamma with kernel = rbf')
-    plt.xlabel('C')
-    plt.ylabel('gamma')
+    plt.xlabel('gamma')
+    plt.ylabel('C')
     plt.colorbar(label='Mean Test Score')
     plt.xticks(np.arange(len(param_gamma)), param_gamma, rotation=45)
     plt.yticks(np.arange(len(param_C)), param_C)
@@ -71,7 +72,7 @@ def show_grid():
         plt.text(i, j, round(label, 2), ha='center', va='center', color='black')
 
     plt.show()
-
+show_grid()
 
 SVM = load('SVM.joblib')
 print(SVM.best_estimator_)
